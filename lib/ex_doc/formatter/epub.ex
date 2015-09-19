@@ -13,7 +13,7 @@ defmodule ExDoc.Formatter.EPUB do
   def run(module_nodes, config) when is_map(config) do
     output = Path.expand(config.output)
     File.rm_rf!(output)
-    :ok = File.mkdir_p("#{output}/OEBPS/modules")
+    File.mkdir_p!("#{output}/OEBPS/modules")
 
     assets |> templates_path |> HTML.generate_assets(output)
 

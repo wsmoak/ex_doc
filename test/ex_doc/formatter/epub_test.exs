@@ -5,7 +5,6 @@ defmodule ExDoc.Formatter.EPUBTest do
     {:ok, _} = File.rm_rf(output_dir)
     :ok = File.mkdir(output_dir)
     {:ok, []} = File.ls(output_dir)
-
     :ok
   end
 

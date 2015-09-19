@@ -84,7 +84,7 @@ defmodule ExDoc.Formatter.HTML do
   def generate_assets(source, output) do
     Enum.each source, fn({ pattern, dir }) ->
       output = "#{output}/#{dir}"
-      File.mkdir! output
+      File.mkdir output
 
       Enum.map Path.wildcard(pattern), fn(file) ->
         base = Path.basename(file)
@@ -175,15 +175,15 @@ defmodule ExDoc.Formatter.HTML do
     File.write!("#{output}/#{file_name}", content)
   end
 
-  defp filter_list(:modules, nodes) do
+  def filter_list(:modules, nodes) do
     Enum.filter nodes, &(not &1.type in [:exception, :protocol, :impl])
   end
 
-  defp filter_list(:exceptions, nodes) do
+  def filter_list(:exceptions, nodes) do
     Enum.filter nodes, &(&1.type in [:exception])
   end
 
-  defp filter_list(:protocols, nodes) do
+  def filter_list(:protocols, nodes) do
     Enum.filter nodes, &(&1.type in [:protocol])
   end
 
