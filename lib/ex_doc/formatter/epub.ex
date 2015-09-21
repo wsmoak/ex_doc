@@ -26,6 +26,7 @@ defmodule ExDoc.Formatter.EPUB do
       config = HTML.process_logo_metadata(config, "#{config.output}/OEBPS/assets")
     end
 
+    generate_mimetype(output)
     generate_extras(output, config, module_nodes)
 
     uuid = "urn:uuid:#{uuid4()}"
@@ -44,19 +45,26 @@ defmodule ExDoc.Formatter.EPUB do
     epub_file
   end
 
+  defp generate_mimetype(output) do
+    content = "application/epub+zip"
+    File.write("#{output}/mimetype", content)
+  end
+
   defp generate_extras(output, config, module_nodes) do
     config.extras
-    |> Enum.map(&Task.async(fn -> generate_extra(&1, output, config, module_nodes) end))
+    |> Enum.map(&Task.async(fn ->
+         generate_extra(&1, output, config, module_nodes)
+       end))
     |> Enum.map(&Task.await/1)
   end
 
   defp generate_extra(input, output, config, module_nodes) do
-    file_extname =
+    file_ext =
       input
       |> Path.extname
       |> String.downcase
 
-    if file_extname in [".md"] do
+    if file_ext in [".md"] do
       file_name =
         input
         |> Path.basename(".md")
