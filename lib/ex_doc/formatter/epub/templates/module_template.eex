@@ -41,21 +41,21 @@
     <% end %>
 
     <%= unless Enum.empty?(functions) do %>
-      <section id="functions_details" class="details-list">
+      <section id="functions" class="details-list">
         <h1 class="section-heading">Functions</h1>
         <%= for node <- functions, do: H.detail_template(node, module) %>
       </section>
     <% end %>
 
     <%= unless Enum.empty?(macros) do %>
-      <section id="macros_details" class="details-list">
+      <section id="macros" class="details-list">
         <h1 class="section-heading">Macros</h1>
         <%= for node <- macros, do: H.detail_template(node, module) %>
       </section>
     <% end %>
 
     <%= unless Enum.empty?(callbacks) do %>
-      <section id="callbacks_details" class="details-list">
+      <section id="callbacks" class="details-list">
         <h1 class="section-heading">Callbacks</h1>
         <%= for node <- callbacks, do: H.detail_template(node, module) %>
       </section>
