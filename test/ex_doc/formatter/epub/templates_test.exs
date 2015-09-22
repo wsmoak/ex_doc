@@ -51,7 +51,7 @@ defmodule ExDoc.Formatter.EPUB.TemplatesTest do
     assert content =~ ~r{example_without_docs/0.*<section class="docstring">.*</section>}ms
     assert content =~ ~r{example_1/0.*Another example}ms
 
-    assert content =~ ~s{<div class="detail-header" id="example_1/0">}
+    assert content =~ ~s{<div class="detail" id="example_1/0">}
     assert content =~ ~s{example(foo, bar \\\\ Baz)}
   end
 
@@ -95,12 +95,12 @@ defmodule ExDoc.Formatter.EPUB.TemplatesTest do
     content = get_module_page([CustomBehaviourOne])
     assert content =~ ~r{<h1>\s*CustomBehaviourOne\s*<small>behaviour</small>\s*</h1>}m
     assert content =~ ~r{Callbacks}
-    assert content =~ ~r{<div class="detail-header" id="c:hello/1">}
+    assert content =~ ~r{<div class="detail" id="c:hello/1">}
 
     content = get_module_page([CustomBehaviourTwo])
     assert content =~ ~r{<h1>\s*CustomBehaviourTwo\s*<small>behaviour</small>\s*</h1>}m
     assert content =~ ~r{Callbacks}
-    assert content =~ ~r{<div class="detail-header" id="c:bye/1">}
+    assert content =~ ~r{<div class="detail" id="c:bye/1">}
   end
 
   ## PROTOCOLS
