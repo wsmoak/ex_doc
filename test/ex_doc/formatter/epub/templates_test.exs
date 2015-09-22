@@ -38,14 +38,14 @@ defmodule ExDoc.Formatter.EPUB.TemplatesTest do
     content = Templates.module_page(doc_config, node)
 
     assert content =~ ~r{<title>XPTOModule [^<]*</title>}
-    assert content =~ ~r{<h1>\s*XPTOModule\s*</h1>}
+    assert content =~ ~r{<h1 id="content">\s*XPTOModule\s*}
   end
 
   test "module_page outputs the functions and docstrings" do
     content = get_module_page([CompiledWithDocs])
 
     assert content =~ ~r{<title>CompiledWithDocs [^<]*</title>}
-    assert content =~ ~r{<h1>\s*CompiledWithDocs\s*}
+    assert content =~ ~r{<h1 id="content">\s*CompiledWithDocs\s*}
     assert content =~ ~r{moduledoc.*Example.*CompiledWithDocs\.example.*}ms
     assert content =~ ~r{example/2.*Some example}ms
     assert content =~ ~r{example_without_docs/0.*<section class="docstring">.*</section>}ms
@@ -93,12 +93,12 @@ defmodule ExDoc.Formatter.EPUB.TemplatesTest do
 
   test "module_page outputs behavior and callbacks" do
     content = get_module_page([CustomBehaviourOne])
-    assert content =~ ~r{<h1>\s*CustomBehaviourOne\s*<small>behaviour</small>\s*</h1>}m
+    assert content =~ ~r{<h1 id="content">\s*CustomBehaviourOne\s*<small>behaviour</small>\s*</h1>}m
     assert content =~ ~r{Callbacks}
     assert content =~ ~r{<div class="detail" id="c:hello/1">}
 
     content = get_module_page([CustomBehaviourTwo])
-    assert content =~ ~r{<h1>\s*CustomBehaviourTwo\s*<small>behaviour</small>\s*</h1>}m
+    assert content =~ ~r{<h1 id="content">\s*CustomBehaviourTwo\s*<small>behaviour</small>\s*</h1>}m
     assert content =~ ~r{Callbacks}
     assert content =~ ~r{<div class="detail" id="c:bye/1">}
   end
@@ -107,6 +107,6 @@ defmodule ExDoc.Formatter.EPUB.TemplatesTest do
 
   test "module_page outputs the protocol type" do
     content = get_module_page([CustomProtocol])
-    assert content =~ ~r{<h1>\s*CustomProtocol\s*<small>protocol</small>\s*}m
+    assert content =~ ~r{<h1 id="content">\s*CustomProtocol\s*<small>protocol</small>\s*}m
   end
 end
