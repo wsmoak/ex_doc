@@ -111,10 +111,14 @@ defmodule ExDoc.Formatter.EPUB do
 
   defp generate_epub(output, config) do
     output = Path.expand(output)
-    target_path = "#{output}/#{config.project}-v#{config.version}.epub" |> String.to_char_list
+    target_path =
+      "#{output}/#{config.project}-v#{config.version}.epub"
+      |> String.to_char_list
+
     {:ok, zip_path} = :zip.create(target_path,
-                  files_to_add(output),
-                  uncompress: ['mimetype'])
+                                  files_to_add(output),
+                                  compress: ['.css', '.html', '.ncx', '.opf',
+                                             '.jpg', '.png', '.xml'])
     {:ok, zip_path}
   end
 
