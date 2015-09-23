@@ -76,7 +76,10 @@ defmodule ExDoc.Formatter.EPUB do
         |> HTML.Autolink.project_doc(module_nodes)
 
       config = Map.put(config, :title, file_name)
-      extra_html = Templates.extra_template(config, content)
+      extra_html =
+        Templates.extra_template(config, content)
+        |> valid_xhtml_ids
+
       File.write!("#{output}/OEBPS/modules/#{file_name}.html", extra_html)
     else
       raise ArgumentError, "file format not recognized, allowed format is: .md"
@@ -164,9 +167,33 @@ defmodule ExDoc.Formatter.EPUB do
   end
 
   defp generate_module_page(output, config, node) do
-    content = Templates.module_page(config, node)
+    content =
+      Templates.module_page(config, node)
+      |> valid_xhtml_ids
     File.write("#{output}/OEBPS/modules/#{node.id}.html", content)
   end
+
+  defp href(%URI{fragment: nil} = link), do: to_string link
+  defp href(%URI{fragment: fragment} = link) do
+    fragment =
+      fragment
+      |> id_replace
+
+    link
+    |> struct([fragment: fragment])
+    |> to_string
+  end
+
+  defp id_replace(id) do
+    pattern = ~r/[^A-Za-z0-9_.-]/
+    replacement = "--"
+
+    String.replace(id, pattern, replacement)
+  end
+
+  defp new_id(id), do: ~s(id="#{id}")
+
+  defp new_href(link), do: ~s(href="#{href link}")
 
   defp templates_path(patterns) do
     Enum.into(patterns, [], fn {pattern, dir} ->
@@ -182,5 +209,23 @@ defmodule ExDoc.Formatter.EPUB do
     <<u0::32, u1::16, u2::16, u3::16, u4::48>> = bin
 
     Enum.map_join([<<u0::32>>, <<u1::16>>, <<u2::16>>, <<u3::16>>, <<u4::48>>], <<45>>, &(Base.encode16(&1, case: :lower)))
+  end
+
+  defp valid_xhtml_ids(content) do
+    content = Regex.replace(~r/href=\s*"(?!(http|https|ftp|mailto|irc):\/\/)([^"]+)"/i,
+                            content,
+                            fn _, _, link ->
+                              link
+                              |> URI.parse
+                              |> new_href
+                            end)
+
+    Regex.replace(~r/id="([^\"]+)"/,
+                  content,
+                  fn _, id ->
+                    id
+                    |> id_replace
+                    |> new_id
+                  end)
   end
 end

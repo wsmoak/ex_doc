@@ -112,7 +112,7 @@ defmodule ExDoc.Formatter.EPUBTest do
 
     assert content =~ ~r{<title>README [^<]*</title>}
     assert content =~ ~r{<a href="RandomError.html"><code>RandomError</code>}
-    assert content =~ ~r{<a href="CustomBehaviourImpl.html#hello/1"><code>CustomBehaviourImpl.hello/1</code>}
+    assert content =~ ~r{<a href="CustomBehaviourImpl.html#hello--1"><code>CustomBehaviourImpl.hello/1</code>}
     assert content =~ ~r{<a href="TypesAndSpecs.Sub.html"><code>TypesAndSpecs.Sub</code></a>}
 
     content = File.read!("#{output_dir}/OEBPS/toc.ncx")
