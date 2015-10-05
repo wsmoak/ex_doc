@@ -15,7 +15,7 @@ defmodule ExDoc.Formatter.EPUB do
     File.rm_rf!(output)
     File.mkdir_p!("#{output}/OEBPS/modules")
 
-    assets |> templates_path |> HTML.generate_assets(output)
+    assets |> templates_path() |> HTML.generate_assets(output)
 
     all = HTML.Autolink.all(module_nodes)
     modules = HTML.filter_list(:modules, all)
@@ -52,33 +52,32 @@ defmodule ExDoc.Formatter.EPUB do
 
   defp generate_extras(output, config, module_nodes) do
     config.extras
-    |> Enum.map(&Task.async(fn ->
-         generate_extra(&1, output, config, module_nodes)
-       end))
+    |> Enum.map(&Task.async(fn -> generate_extra(&1, output, config, module_nodes) end))
     |> Enum.map(&Task.await/1)
   end
 
   defp generate_extra(input, output, config, module_nodes) do
     file_ext =
       input
-      |> Path.extname
-      |> String.downcase
+      |> Path.extname()
+      |> String.downcase()
 
     if file_ext in [".md"] do
       file_name =
         input
         |> Path.basename(".md")
-        |> String.upcase
+        |> String.upcase()
 
       content =
         input
-        |> File.read!
+        |> File.read!()
         |> HTML.Autolink.project_doc(module_nodes)
 
       config = Map.put(config, :title, file_name)
       extra_html =
-        Templates.extra_template(config, content)
-        |> valid_xhtml_ids
+        config
+        |> Templates.extra_template(content)
+        |> valid_xhtml_ids()
 
       File.write!("#{output}/OEBPS/modules/#{file_name}.html", extra_html)
     else
@@ -116,7 +115,7 @@ defmodule ExDoc.Formatter.EPUB do
     output = Path.expand(output)
     target_path =
       "#{output}/#{config.project}-v#{config.version}.epub"
-      |> String.to_char_list
+      |> String.to_char_list()
 
     {:ok, zip_path} = :zip.create(target_path,
                                   files_to_add(output),
@@ -162,14 +161,16 @@ defmodule ExDoc.Formatter.EPUB do
   defp format_datetime do
     {{year, month, day}, {hour, min, sec}} = :calendar.universal_time()
     list = [year, month, day, hour, min, sec]
-    :io_lib.format("~4..0B-~2..0B-~2..0BT~2..0B:~2..0B:~2..0BZ", list)
-    |> IO.iodata_to_binary
+    "~4..0B-~2..0B-~2..0BT~2..0B:~2..0B:~2..0BZ"
+    |> :io_lib.format(list)
+    |> IO.iodata_to_binary()
   end
 
   defp generate_module_page(output, config, node) do
     content =
-      Templates.module_page(config, node)
-      |> valid_xhtml_ids
+      config
+      |> Templates.module_page(node)
+      |> valid_xhtml_ids()
     File.write("#{output}/OEBPS/modules/#{node.id}.html", content)
   end
 
@@ -177,11 +178,11 @@ defmodule ExDoc.Formatter.EPUB do
   defp href(%URI{fragment: fragment} = link) do
     fragment =
       fragment
-      |> id_replace
+      |> id_replace()
 
     link
     |> struct([fragment: fragment])
-    |> to_string
+    |> to_string()
   end
 
   defp id_replace(id) do
@@ -208,7 +209,8 @@ defmodule ExDoc.Formatter.EPUB do
     bin = <<u0::48, 4::4, u1::12, 2::2, u2::62>>
     <<u0::32, u1::16, u2::16, u3::16, u4::48>> = bin
 
-    Enum.map_join([<<u0::32>>, <<u1::16>>, <<u2::16>>, <<u3::16>>, <<u4::48>>], <<45>>, &(Base.encode16(&1, case: :lower)))
+    Enum.map_join([<<u0::32>>, <<u1::16>>, <<u2::16>>, <<u3::16>>, <<u4::48>>], <<45>>,
+                  &(Base.encode16(&1, case: :lower)))
   end
 
   defp valid_xhtml_ids(content) do

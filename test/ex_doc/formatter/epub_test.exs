@@ -42,14 +42,14 @@ defmodule ExDoc.Formatter.EPUBTest do
 
   test "run generates an EPUB file in the default directory" do
     generate_docs(doc_config)
-    assert File.regular?("#{output_dir}/#{doc_config[:project]}-v#{doc_config[:version]}.epub") == true
+    assert File.regular?("#{output_dir}/#{doc_config[:project]}-v#{doc_config[:version]}.epub")
   end
 
   test "run generates an EPUB file in specified output directory" do
     config = doc_config([output: "#{output_dir}/another_dir", main: "RandomError"])
     generate_docs(config)
 
-    assert File.regular?("#{output_dir}/another_dir/#{doc_config[:project]}-v#{doc_config[:version]}.epub") == true
+    assert File.regular?("#{output_dir}/another_dir/#{doc_config[:project]}-v#{doc_config[:version]}.epub")
   end
 
   test "run generates an EPUB file with a standardized structure" do

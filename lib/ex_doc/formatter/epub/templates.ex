@@ -30,7 +30,8 @@ defmodule ExDoc.Formatter.EPUB.Templates do
   @toc_template_doc """
   Creates an *Navigation Center eXtended* document (as defined in OPF 2.0.1),
   this is for compatibility purposes with EPUB 2 Reading Systems.  EPUB 3
-  Reading Systems must ignore the NCX in favor of the [EPUB Navigation Document](http://www.idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-nav).
+  Reading Systems must ignore the NCX in favor of the
+  [EPUB Navigation Document](http://www.idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-nav).
   """
 
   @doc """
