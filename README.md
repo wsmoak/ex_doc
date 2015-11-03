@@ -77,6 +77,15 @@ Then add the entry:
 
 to your `config/config.exs` file.
 
+## Important notes
+
+  * There is no public API for ExDoc, so its docs are not published on hexdocs.pm
+  * Development is discussed on the [elixir-lang-core Mailing list](https://groups.google.com/forum/#!forum/elixir-lang-core)
+
+## Contributing
+
+For overall guidelines, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 # License
 
 ExDoc source code is released under Apache 2 License. The generated contents, however, are under different licenses based on projects used to help render html, including css, js and other assets.
