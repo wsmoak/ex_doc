@@ -11,6 +11,7 @@ defmodule ExDoc do
     """
     defstruct [
       extras: [],
+      extras_prefix: "extra-",
       formatter: "html",
       formatter_opts: [],
       homepage_url: nil,

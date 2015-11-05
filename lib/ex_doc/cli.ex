@@ -11,7 +11,7 @@ defmodule ExDoc.CLI do
     {opts, args, _} = OptionParser.parse(args,
                aliases: [o: :output, f: :formatter, c: :config, r: :source_root,
                          u: :source_url, m: :main, p: :homepage_url, l: :logo,
-                         e: :extra, v: :version],
+                         e: :extra, x: :extras_prefix, v: :version],
                switches: [extra: :keep])
 
     cond do
@@ -111,6 +111,7 @@ defmodule ExDoc.CLI do
       -p, --homepage-url  URL to link to for the site name
       -e, --extra         Allow users to include additional Markdown files
                           May be given multiple times
+      -x, --extra-prefix  Prefix for extra filenames by default
       -l, --logo          Path to the image logo of the project (only PNG or JPEG accepted)
                           The image size will be 64x64 when --formatter is "html"
                           default: `nil`

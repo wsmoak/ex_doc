@@ -111,7 +111,7 @@ defmodule ExDoc.Formatter.HTML do
 
     if file_ext in [".md"] do
       title = Path.rootname(Path.basename(input))
-      file_name = title_to_filename(title)
+      file_name = title_to_filename(config.extras_prefix, title)
 
       content =
         input
@@ -143,8 +143,8 @@ defmodule ExDoc.Formatter.HTML do
     end)
   end
 
-  defp title_to_filename(title) do
-    "extra-" <> (title |> String.replace(" ", "-") |> String.downcase)
+  defp title_to_filename(prefix,title) do
+    prefix <> (title |> String.replace(" ", "-") |> String.downcase)
   end
 
   defp header_to_id(header) do
