@@ -110,13 +110,14 @@ defmodule ExDoc.Formatter.HTML do
       |> String.downcase()
 
     if file_ext in [".md"] do
-      title = Path.rootname(Path.basename(input))
-      file_name = title_to_filename(title)
+      file_name = Path.basename(input,".md")
 
       content =
         input
         |> File.read!()
         |> Autolink.project_doc(module_nodes)
+
+      title = extract_title(content)
 
       html = Templates.extra_template(config, title, modules,
                                       exceptions, protocols, link_headers(content))
@@ -137,14 +138,18 @@ defmodule ExDoc.Formatter.HTML do
     |> Enum.map(&{&1, header_to_id(&1)})
   end
 
+  @h1_regex ~r/^#([^#].*)$/m
+
+  defp extract_title(content) do
+    @h1_regex
+    |> Regex.scan(content, capture: :all_but_first)
+    |> List.flatten()
+  end
+
   defp link_headers(content) do
     Regex.replace(@h2_regex, content, fn _, part ->
       "<h2 id=#{inspect header_to_id(part)}>#{part}</h2>"
     end)
-  end
-
-  defp title_to_filename(title) do
-    "extra-" <> (title |> String.replace(" ", "-") |> String.downcase)
   end
 
   defp header_to_id(header) do
