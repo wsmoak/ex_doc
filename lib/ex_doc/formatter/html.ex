@@ -103,13 +103,14 @@ defmodule ExDoc.Formatter.HTML do
     [{"extra-api-reference", "API Reference", []}|extras]
   end
 
+  @ext ".md"
+
   defp generate_extra(input, output, module_nodes, modules, exceptions, protocols, config) do
     file_ext =
       input
       |> Path.extname()
       |> String.downcase()
 
-    @ext ".md"
     if file_ext in [@ext] do
       file_name = Path.basename(input,@ext)
 
