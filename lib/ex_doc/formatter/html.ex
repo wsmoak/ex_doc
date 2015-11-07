@@ -142,8 +142,7 @@ defmodule ExDoc.Formatter.HTML do
 
   defp extract_title(content) do
     @h1_regex
-    |> Regex.scan(content, capture: :all_but_first)
-    |> List.flatten()
+    |> Regex.run(content, capture: :all_but_first)
   end
 
   defp link_headers(content) do
