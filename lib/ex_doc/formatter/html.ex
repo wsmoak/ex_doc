@@ -109,8 +109,9 @@ defmodule ExDoc.Formatter.HTML do
       |> Path.extname()
       |> String.downcase()
 
-    if file_ext in [".md"] do
-      file_name = Path.basename(input,".md")
+    @ext ".md"
+    if file_ext in [@ext] do
+      file_name = Path.basename(input,@ext)
 
       content =
         input
