@@ -104,11 +104,9 @@ defmodule ExDoc.Formatter.HTML do
   end
 
   defp generate_extra({input_file, output_file_name}, output, module_nodes, modules, exceptions, protocols, config) do
-    title = input_to_title(output_file_name)
 
     options = %{
-      title: title,
-      output_file_name: title,
+      output_file_name: to_string(output_file_name),
       input: to_string(input_file),
       output: output
     }
@@ -117,11 +115,10 @@ defmodule ExDoc.Formatter.HTML do
   end
 
   defp generate_extra(input, output, module_nodes, modules, exceptions, protocols, config) do
-    title = input_to_title(input)
-    output_file_name = title_to_filename(title)
+
+    output_file_name = Path.basename(input,".md")
 
     options = %{
-      title: title,
       output_file_name: output_file_name,
       input: input,
       output: output
@@ -137,7 +134,9 @@ defmodule ExDoc.Formatter.HTML do
         |> File.read!()
         |> Autolink.project_doc(module_nodes)
 
-      html = Templates.extra_template(config, options.title, modules,
+      title = extract_title(content) || input_to_title(options.input)
+
+      html = Templates.extra_template(config, title, modules,
                                       exceptions, protocols, link_headers(content))
 
       output = "#{options.output}/#{options.output_file_name}.html"
@@ -148,7 +147,7 @@ defmodule ExDoc.Formatter.HTML do
 
       File.write!(output, html)
 
-      {options.output_file_name, options.title, extract_headers(content)}
+      {options.output_file_name, title, extract_headers(content)}
     else
       raise ArgumentError, "file format not recognized, allowed format is: .md"
     end
@@ -165,6 +164,15 @@ defmodule ExDoc.Formatter.HTML do
       else
         false
       end
+  end
+
+  @h1_regex ~r/^#([^#].*)\n$/m
+
+  def extract_title(content) do
+    @h1_regex
+    |> Regex.run(content, capture: :all_but_first)
+    |> List.wrap
+    |> List.first
   end
 
   @h2_regex ~r/^##([^#].*)\n$/m
